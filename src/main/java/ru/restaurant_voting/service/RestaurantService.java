@@ -45,7 +45,6 @@ public class RestaurantService {
 
     public Restaurant save(Restaurant restaurant) {
         log.info("save restaurant {} by admin", restaurant);
-        restaurant.setMenu(menuRepository.getAll(restaurant.id()));
         return restaurantRepository.save(restaurant);
     }
 }
