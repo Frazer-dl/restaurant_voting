@@ -15,7 +15,6 @@ import java.util.List;
 public class Restaurant extends NamedEntity {
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "restaurant", cascade = {CascadeType.ALL}, orphanRemoval = true)
-    @JsonManagedReference
     private List<Menu> menu;
 
     public Restaurant(Integer id, String name, List<Menu> menu) {
