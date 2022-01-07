@@ -48,7 +48,6 @@ public class AdminVoteController {
     @GetMapping("/date")
     @Cacheable
     public List<Vote> getByDate(@RequestParam("dateTime") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime date) {
-        System.out.println(date);
         return voteService.getBetweenHalfOpen(date);
     }
 }

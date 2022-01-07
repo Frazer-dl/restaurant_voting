@@ -6,7 +6,6 @@ import ru.restaurant_voting.model.Vote;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @Transactional(readOnly = true)

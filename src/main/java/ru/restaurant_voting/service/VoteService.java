@@ -4,17 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.restaurant_voting.model.Restaurant;
 import ru.restaurant_voting.model.Vote;
-import ru.restaurant_voting.repository.RestaurantRepository;
 import ru.restaurant_voting.repository.VoteRepository;
 import ru.restaurant_voting.util.DateTimeUtil;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Service
 @Slf4j
