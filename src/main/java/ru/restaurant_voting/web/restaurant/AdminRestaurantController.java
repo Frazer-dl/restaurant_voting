@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.restaurant_voting.model.Menu;
 import ru.restaurant_voting.model.Restaurant;
-import ru.restaurant_voting.repository.MenuRepository;
 import ru.restaurant_voting.service.MenuService;
 import ru.restaurant_voting.service.RestaurantService;
 import ru.restaurant_voting.util.validation.ValidationUtil;
@@ -18,7 +17,6 @@ import ru.restaurant_voting.util.validation.ValidationUtil;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = AdminRestaurantController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -30,9 +28,11 @@ public class AdminRestaurantController {
     static final String REST_URL = "/api/admin/restaurant";
 
     private final RestaurantService restaurantService;
+    private final MenuService menuService;
 
-    public AdminRestaurantController(RestaurantService restaurantService) {
+    public AdminRestaurantController(RestaurantService restaurantService, MenuService menuService) {
         this.restaurantService = restaurantService;
+        this.menuService = menuService;
     }
 
     @GetMapping()
@@ -53,12 +53,13 @@ public class AdminRestaurantController {
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Restaurant> create(@Valid @RequestBody Restaurant restaurant) {
-        if (!restaurant.getMenu().isEmpty()) {
-            throw new IllegalArgumentException("To create menu use /api/restaurant/{id}/menu");
-        }
         log.info("create {}", restaurant);
         ValidationUtil.checkNew(restaurant);
         Restaurant created = restaurantService.save(restaurant);
+        if (!restaurant.getMenu().isEmpty()) {
+            List<Menu> menus = restaurant.getMenu();
+            menus.forEach(m -> menuService.save(m, created.getId()));
+        }
 
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path(REST_URL + "/{id}")

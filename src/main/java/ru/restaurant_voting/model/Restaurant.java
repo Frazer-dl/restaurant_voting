@@ -14,7 +14,7 @@ import java.util.List;
 @ToString(callSuper = true)
 public class Restaurant extends NamedEntity {
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "restaurant", cascade = {CascadeType.ALL}, orphanRemoval = true)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "restaurant", cascade = {CascadeType.MERGE}, orphanRemoval = true)
     private List<Menu> menu;
 
     public Restaurant(Integer id, String name, List<Menu> menu) {
