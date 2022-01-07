@@ -1,4 +1,4 @@
-package ru.restaurant_voting.web.restaurant;
+package ru.restaurant_voting.web.menu;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheConfig;
@@ -19,7 +19,6 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping(value = AdminMenuController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 @Slf4j
-// TODO: cache only most requested data!
 @CacheConfig(cacheNames = "menu")
 public class AdminMenuController {
 
