@@ -2,6 +2,8 @@ package ru.restaurant_voting.web.restaurant;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -30,12 +32,14 @@ public class AdminMenuController {
     }
 
     @GetMapping()
-    public List<Menu> getAllMenus(@PathVariable int id) {
+    @Cacheable
+    public List<Menu> getAll(@PathVariable int id) {
         return menuService.getAll(id);
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Menu>> createMenu(@Valid @RequestBody List<Menu> menus, @PathVariable int id) {
+    @CacheEvict(allEntries = true)
+    public ResponseEntity<List<Menu>> create(@Valid @RequestBody List<Menu> menus, @PathVariable int id) {
         log.info("create {}", menus);
         menus.forEach(ValidationUtil::checkNew);
         List<Menu> created = menus.stream().map(m -> menuService.save(m, id)).collect(Collectors.toList());
@@ -44,9 +48,17 @@ public class AdminMenuController {
 
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void updateMenu(@Valid @RequestBody List<Menu> menus, @PathVariable int id) {
+    @CacheEvict(allEntries = true)
+    public void update(@Valid @RequestBody List<Menu> menus, @PathVariable int id) {
         log.info("update {} for restaurant {}", menus, id);
         menus.forEach(m -> ValidationUtil.assureIdConsistent(m, m.getId()));
         menuService.update(menus);
+    }
+
+    @DeleteMapping()
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @CacheEvict(allEntries = true)
+    public void delete(@Valid @RequestBody List<Menu> menus, @PathVariable int id) {
+        menuService.delete(menus, id);
     }
 }

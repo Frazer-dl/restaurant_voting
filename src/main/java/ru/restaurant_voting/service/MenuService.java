@@ -40,14 +40,18 @@ public class MenuService {
     @Transactional
     public void update(List<Menu> menus) {
         log.info("update menus {} for restaurant by admin", menus);
-        List<Menu> menus1 = menus.stream()
+        menus.stream()
                 .peek(menu -> {
                     Menu menuFromDb = menuRepository.getById(menu.getId());
                     menuFromDb.setName(menu.getName());
                     menuFromDb.setPrice(menu.getPrice());
                     menuFromDb.setDateTime(menu.getDateTime());
 
-                }).collect(Collectors.toList());
-        menus1.forEach(System.out::println);
+                }).close();
+    }
+
+    public void delete(List<Menu> menus, int id) {
+        log.info("delete menus {} for restaurant {} by admin", menus, id);
+        menuRepository.deleteAll(menus);
     }
 }
