@@ -4,12 +4,9 @@ import lombok.AllArgsConstructor;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
 import ru.restaurant_voting.model.Vote;
-import ru.restaurant_voting.repository.RestaurantRepository;
-import ru.restaurant_voting.repository.UserRepository;
 import ru.restaurant_voting.repository.VoteRepository;
 
 @EnableCaching

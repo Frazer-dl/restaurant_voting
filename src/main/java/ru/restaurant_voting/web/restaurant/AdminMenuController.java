@@ -57,7 +57,6 @@ public class AdminMenuController {
 
     @DeleteMapping()
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @CacheEvict(allEntries = true)
     public void delete(@Valid @RequestBody List<Menu> menus, @PathVariable int id) {
         menuService.delete(menus, id);
     }

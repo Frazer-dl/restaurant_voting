@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.restaurant_voting.model.Restaurant;
-import ru.restaurant_voting.repository.MenuRepository;
 import ru.restaurant_voting.repository.RestaurantRepository;
 
 import java.util.List;
@@ -16,7 +15,6 @@ import java.util.Optional;
 public class RestaurantService {
 
     private final RestaurantRepository restaurantRepository;
-    private final MenuRepository menuRepository;
 
     public Optional<Restaurant> get(int id, int restaurantId) {
         log.info("get restaurant {} for user {}", restaurantId, id);

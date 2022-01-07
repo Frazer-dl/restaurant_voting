@@ -2,6 +2,8 @@ package ru.restaurant_voting.web.restaurant;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -42,12 +44,14 @@ public class UserRestaurantController {
     }
 
     @GetMapping
+    @Cacheable
     public List<Restaurant> getAll(@AuthenticationPrincipal AuthUser authUser) {
         return restaurantService.getAll(authUser.id());
     }
 
-    @PutMapping(value = "/{id}")
+    @PutMapping(value = "/{id}/vote")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @CacheEvict(allEntries = true)
     public void createOrUpdateVote(@AuthenticationPrincipal AuthUser authUser, @PathVariable int id) {
         int userId = authUser.id();
         log.info("voting restaurant {} for user {}", id, userId);
@@ -58,7 +62,8 @@ public class UserRestaurantController {
         }
     }
 
-    @GetMapping("/{id}/menu")
+    @GetMapping("/{id}/menu/today")
+    @Cacheable
     public List<Menu> getAllMenuForToDay(@PathVariable int id) {
         return menuService.getAllForToDay(id);
     }

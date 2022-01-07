@@ -2,13 +2,14 @@ package ru.restaurant_voting.web.restaurant;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import ru.restaurant_voting.model.Menu;
 import ru.restaurant_voting.model.Restaurant;
 import ru.restaurant_voting.service.MenuService;
 import ru.restaurant_voting.service.RestaurantService;
@@ -36,6 +37,7 @@ public class AdminRestaurantController {
     }
 
     @GetMapping()
+    @Cacheable
     public List<Restaurant> getAll() {
         return restaurantService.getAll();
     }
@@ -52,15 +54,12 @@ public class AdminRestaurantController {
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    @CacheEvict(allEntries = true)
     public ResponseEntity<Restaurant> create(@Valid @RequestBody Restaurant restaurant) {
         log.info("create {}", restaurant);
         ValidationUtil.checkNew(restaurant);
         Restaurant created = restaurantService.save(restaurant);
-        if (!restaurant.getMenu().isEmpty()) {
-            List<Menu> menus = restaurant.getMenu();
-            menus.forEach(m -> menuService.save(m, created.getId()));
-        }
-
+        menuUpdate(restaurant, created.getId());
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path(REST_URL + "/{id}")
                 .buildAndExpand(created.getId()).toUri();
@@ -70,9 +69,17 @@ public class AdminRestaurantController {
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Transactional
+    @CacheEvict(allEntries = true)
     public void update(@Valid @RequestBody Restaurant restaurant, @PathVariable int id) {
         log.info("update {} with id={}", restaurant, id);
         ValidationUtil.assureIdConsistent(restaurant, id);
+        menuUpdate(restaurant, id);
         restaurantService.save(restaurant);
+    }
+
+    private void menuUpdate(Restaurant restaurant, int id) {
+        if (!restaurant.getMenu().isEmpty()) {
+            restaurant.getMenu().forEach(m -> menuService.save(m, id));
+        }
     }
 }

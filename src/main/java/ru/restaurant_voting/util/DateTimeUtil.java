@@ -2,7 +2,6 @@ package ru.restaurant_voting.util;
 
 import lombok.experimental.UtilityClass;
 import org.springframework.lang.Nullable;
-import ru.restaurant_voting.model.Vote;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

@@ -1,6 +1,5 @@
 package ru.restaurant_voting.model;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
 import javax.persistence.*;
@@ -15,6 +14,7 @@ import java.util.List;
 public class Restaurant extends NamedEntity {
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "restaurant", cascade = {CascadeType.MERGE}, orphanRemoval = true)
+    @CollectionTable
     private List<Menu> menu;
 
     public Restaurant(Integer id, String name, List<Menu> menu) {

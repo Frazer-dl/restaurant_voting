@@ -11,9 +11,7 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Entity
 @Table(name = "vote", uniqueConstraints = {@UniqueConstraint(name = "vote_user_id_idx", columnNames = {"user_id"})})
