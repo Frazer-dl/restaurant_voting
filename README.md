@@ -24,3 +24,5 @@ P.S.: Make sure everything works with latest version that is on github :)
 P.P.S.: Assume that your API will be used by a frontend developer to build frontend on top of that.
 
 -----------------------------
+
+For project check you can use [swagger api](http://localhost:8080/swagger-ui/index.html#/) or postman with [JSON](https://www.getpostman.com/collections/c61a85e37b527108de63)
