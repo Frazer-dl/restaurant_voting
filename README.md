@@ -25,4 +25,4 @@ P.P.S.: Assume that your API will be used by a frontend developer to build front
 
 -----------------------------
 
-For project check you can use [swagger api](http://localhost:8080/swagger-ui/index.html#/) or postman with [JSON](https://www.getpostman.com/collections/c61a85e37b527108de63)
+For project check using [swagger api](http://localhost:8080/swagger-ui/index.html#/) as well postman with [JSON](https://www.getpostman.com/collections/c61a85e37b527108de63) after download and run app.
