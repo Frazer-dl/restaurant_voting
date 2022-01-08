@@ -37,7 +37,7 @@ public class AdminVoteController {
 
     @GetMapping("/rest={id}")
     public List<Vote> getByRestaurantId(@PathVariable int id) {
-        return voteRepository.getByRestaurantId(id).stream().toList();
+        return voteRepository.getByRestaurantId(id);
     }
 
     @GetMapping("/user={id}")

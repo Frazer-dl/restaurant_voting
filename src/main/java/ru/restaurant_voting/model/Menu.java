@@ -1,7 +1,10 @@
 package ru.restaurant_voting.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -14,10 +17,9 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@ToString(callSuper = true)
 public class Menu extends BaseEntity {
 
-    @Column(name = "description", nullable = false)
+    @Column(name = "name", nullable = false)
     @NotBlank
     @Size(min = 2, max = 120)
     private String name;
@@ -41,5 +43,14 @@ public class Menu extends BaseEntity {
         this.dateTime = dateTime;
         this.price = price;
         this.restaurant = restaurant;
+    }
+
+    @Override
+    public String toString() {
+        return "Menu{" +
+                "id:" + id +
+                ", name:'" + name + '\'' +
+                ", price:" + price +
+                '}';
     }
 }

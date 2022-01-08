@@ -3,7 +3,6 @@ package ru.restaurant_voting.service;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import ru.restaurant_voting.model.Menu;
 import ru.restaurant_voting.repository.MenuRepository;
 import ru.restaurant_voting.repository.RestaurantRepository;
@@ -32,25 +31,23 @@ public class MenuService {
 
     public Menu save(Menu menu, int id) {
         log.info("save menu {} for restaurant{} by admin", menu, id);
-        menu.setRestaurant(restaurantRepository.get(id).get());
-        return menuRepository.save(menu);
+        return menuRepository.save(prepareToSave(menu, id));
     }
 
-    @Transactional
-    public void update(List<Menu> menus) {
-        log.info("update menus {} for restaurant by admin", menus);
-        menus.stream()
-                .peek(menu -> {
-                    Menu menuFromDb = menuRepository.getById(menu.getId());
-                    menuFromDb.setName(menu.getName());
-                    menuFromDb.setPrice(menu.getPrice());
-                    menuFromDb.setDateTime(menu.getDateTime());
 
-                }).close();
+    public void update(List<Menu> menus, int id) {
+        log.info("update menus {} for restaurant by admin", menus);
+        menus.forEach(m -> prepareToSave(m, id));
+        menuRepository.saveAll(menus);
     }
 
     public void delete(List<Menu> menus, int id) {
         log.info("delete menus {} for restaurant {} by admin", menus, id);
         menuRepository.deleteAll(menus);
+    }
+
+    public Menu prepareToSave(Menu menu, int id) {
+        menu.setRestaurant(restaurantRepository.get(id).get());
+        return menu;
     }
 }

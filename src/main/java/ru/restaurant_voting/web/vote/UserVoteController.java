@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import ru.restaurant_voting.error.IllegalRequestDataException;
+import ru.restaurant_voting.model.Restaurant;
 import ru.restaurant_voting.model.Vote;
 import ru.restaurant_voting.service.RestaurantService;
 import ru.restaurant_voting.service.VoteService;
@@ -32,9 +33,9 @@ public class UserVoteController {
         this.voteService = voteService;
     }
 
-    @GetMapping("/vote/{q}")
+    @GetMapping("/top={q}")
     @Cacheable
-    public List<String> getMostPopularRestaurantName(@PathVariable int q) {
+    public List<Restaurant> getMostPopularRestaurantName(@PathVariable int q) {
         return voteService.getMostPopularRestaurant(q);
     }
 

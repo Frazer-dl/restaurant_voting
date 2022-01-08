@@ -51,11 +51,12 @@ public class AdminMenuController {
     public void update(@Valid @RequestBody List<Menu> menus, @PathVariable int id) {
         log.info("update {} for restaurant {}", menus, id);
         menus.forEach(m -> ValidationUtil.assureIdConsistent(m, m.getId()));
-        menuService.update(menus);
+        menuService.update(menus, id);
     }
 
     @DeleteMapping()
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @CacheEvict(allEntries = true)
     public void delete(@Valid @RequestBody List<Menu> menus, @PathVariable int id) {
         menuService.delete(menus, id);
     }

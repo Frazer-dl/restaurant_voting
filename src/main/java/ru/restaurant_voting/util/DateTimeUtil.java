@@ -23,8 +23,8 @@ public class DateTimeUtil {
         return localDate != null ? localDate.plus(1, ChronoUnit.DAYS).atStartOfDay() : MAX_DATE;
     }
 
-    public static boolean isUserVoteInTime(LocalDateTime localDateTime) {
-        return isBetweenHalfOpen(localDateTime, getStartDate(localDateTime), getEndDate(localDateTime));
+    public static boolean isUserVoteInTime(LocalDateTime localDateTime, LocalDateTime voteTime) {
+        return isBetweenHalfOpen(localDateTime, getStartDate(voteTime), getEndDate(voteTime));
     }
 
     public static LocalDateTime getStartDate(LocalDateTime localDateTime) {

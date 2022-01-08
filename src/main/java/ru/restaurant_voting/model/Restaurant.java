@@ -1,6 +1,9 @@
 package ru.restaurant_voting.model;
 
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.List;
@@ -10,7 +13,6 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@ToString(callSuper = true)
 public class Restaurant extends NamedEntity {
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "restaurant", cascade = {CascadeType.MERGE}, orphanRemoval = true)
@@ -21,5 +23,14 @@ public class Restaurant extends NamedEntity {
         this.id = id;
         this.name = name;
         this.menu = menu;
+    }
+
+    @Override
+    public String toString() {
+        return "Restaurant{" +
+                "id:" + id +
+                ", name:'" + name + '\'' +
+                ", menu:" + menu +
+                '}';
     }
 }

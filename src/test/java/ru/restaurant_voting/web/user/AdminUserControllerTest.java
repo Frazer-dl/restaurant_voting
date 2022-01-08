@@ -132,7 +132,7 @@ class AdminUserControllerTest extends AbstractControllerTest {
         perform(MockMvcRequestBuilders.get(REST_URL))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(UserTestData.USER_MATCHER.contentJson(UserTestData.admin, UserTestData.user));
+                .andExpect(UserTestData.USER_MATCHER.contentJson(UserTestData.admin, UserTestData.user, UserTestData.user2, UserTestData.user3));
     }
 
     @Test
@@ -145,16 +145,6 @@ class AdminUserControllerTest extends AbstractControllerTest {
                 .andExpect(status().isNoContent());
 
         Assertions.assertFalse(userRepository.getById(UserTestData.USER_ID).isEnabled());
-    }
-
-    @Test
-    @WithUserDetails(value = UserTestData.ADMIN_MAIL)
-    void getWithMeals() throws Exception {
-        perform(MockMvcRequestBuilders.get(REST_URL + UserTestData.ADMIN_ID + "/with-meals"))
-                .andExpect(status().isOk())
-                .andDo(print())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(UserTestData.USER_WITH_MEALS_MATCHER.contentJson(UserTestData.admin));
     }
 
     @Test

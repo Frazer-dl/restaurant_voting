@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.restaurant_voting.error.IllegalRequestDataException;
+import ru.restaurant_voting.model.Restaurant;
 import ru.restaurant_voting.model.Vote;
 import ru.restaurant_voting.repository.VoteRepository;
 import ru.restaurant_voting.util.DateTimeUtil;
@@ -22,11 +24,11 @@ public class VoteService {
     public Vote setVote(int id, int restaurantId) {
         if (voteRepository.getByUserId(id).isPresent()) {
             Vote vote = voteRepository.getByUserId(id).get();
-            if (DateTimeUtil.isUserVoteInTime(vote.getDate())) {
+            if (DateTimeUtil.isUserVoteInTime(LocalDateTime.now(), vote.getDate())) {
+                System.out.println(vote.getDate());
                 return updateVote(vote, id, restaurantId);
             } else {
-                log.info("setVote for restaurant {} from user {} can't update vote it's too late", restaurantId, id);
-                return vote;
+                throw new IllegalRequestDataException("Can't update vote it's too late");
             }
         }
         log.info("setVote for restaurant {} from user {}", restaurantId, id);
@@ -44,9 +46,9 @@ public class VoteService {
                 DateTimeUtil.getEndDate(dateTime));
     }
 
-    public List<String> getMostPopularRestaurant(int quantity) {
+    public List<Restaurant> getMostPopularRestaurant(int quantity) {
         int q = quantity;
-        List<String> restaurantNames = voteRepository.getMostPopularRestaurant();
+        List<Restaurant> restaurantNames = voteRepository.getMostPopularRestaurant();
         if (restaurantNames.size() < q) q = restaurantNames.size();
         return restaurantNames.subList(0, q);
     }

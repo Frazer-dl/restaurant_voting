@@ -39,4 +39,20 @@ public class Vote extends BaseEntity {
         this.restaurantId = restaurantId;
         this.date = LocalDateTime.now();
     }
+
+    public Vote(Integer id, Integer userId, Integer restaurantId, LocalDateTime localDateTime) {
+        super(id);
+        this.userId = userId;
+        this.restaurantId = restaurantId;
+        this.date = localDateTime;
+    }
+
+    @Override
+    public String toString() {
+        return "Vote{" +
+                "id=" + id +
+                ", userId=" + userId +
+                ", restaurantId=" + restaurantId +
+                '}';
+    }
 }

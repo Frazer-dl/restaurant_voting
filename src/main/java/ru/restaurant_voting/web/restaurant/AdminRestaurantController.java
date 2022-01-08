@@ -48,6 +48,7 @@ public class AdminRestaurantController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @CacheEvict(allEntries = true)
     public void delete(@PathVariable int id) {
         restaurantService.delete(id);
     }
@@ -78,7 +79,7 @@ public class AdminRestaurantController {
 
     private void menuUpdate(Restaurant restaurant, int id) {
         if (!restaurant.getMenu().isEmpty()) {
-            restaurant.getMenu().forEach(m -> menuService.save(m, id));
+            menuService.update(restaurant.getMenu(), id);
         }
     }
 }

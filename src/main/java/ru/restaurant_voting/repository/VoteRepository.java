@@ -2,6 +2,7 @@ package ru.restaurant_voting.repository;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
+import ru.restaurant_voting.model.Restaurant;
 import ru.restaurant_voting.model.Vote;
 
 import java.time.LocalDateTime;
@@ -22,6 +23,6 @@ public interface VoteRepository extends BaseRepository<Vote> {
     @Query("SELECT v FROM  Vote v WHERE v.date >= :startDate AND v.date < :endDate ORDER BY v.date")
     List<Vote> getBetweenHalfOpen(LocalDateTime startDate, LocalDateTime endDate);
 
-    @Query("SELECT r.name as counted FROM Vote AS v INNER JOIN Restaurant r on r.id = v.restaurantId GROUP BY r.name ORDER BY counted desc")
-    List<String> getMostPopularRestaurant();
+    @Query("SELECT r FROM Vote AS v INNER JOIN Restaurant r on r.id = v.restaurantId GROUP BY r.name ORDER BY COUNT(v.restaurantId) desc")
+    List<Restaurant> getMostPopularRestaurant();
 }
