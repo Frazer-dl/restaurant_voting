@@ -3,6 +3,7 @@ package ru.restaurant_voting.repository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 import ru.restaurant_voting.model.Menu;
+import ru.restaurant_voting.model.Restaurant;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -15,4 +16,7 @@ public interface MenuRepository extends BaseRepository<Menu>{
 
     @Query("SELECT m FROM Menu m WHERE m.restaurant.id = :restaurantId")
     List<Menu> getAll(int restaurantId);
+
+    @Query("SELECT m FROM Menu m JOIN FETCH m.restaurant WHERE m.id = :id and m.restaurant.id = :userId")
+    Restaurant getWithRestaurant(int id, int userId);
 }

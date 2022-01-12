@@ -12,7 +12,7 @@ public class RestaurantTestData {
     public static final Integer RESTAURANT_1_ID = 1;
     public static final Integer RESTAURANT_2_ID = 2;
     public static final String RESTAURANT_1_NAME = "Pandas";
-    public static final String RESTAURANT_2_NAME = "Millenium";
+    public static final String RESTAURANT_2_NAME = "Millennium";
 
     public static final Restaurant restaurant_1 = new Restaurant(RESTAURANT_1_ID, RESTAURANT_1_NAME, MenuTestData.menus_1);
     public static final Restaurant restaurant_2 = new Restaurant(RESTAURANT_2_ID, RESTAURANT_2_NAME, MenuTestData.menus_2);

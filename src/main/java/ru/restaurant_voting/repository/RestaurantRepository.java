@@ -1,7 +1,9 @@
 package ru.restaurant_voting.repository;
 
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
+import ru.restaurant_voting.model.Menu;
 import ru.restaurant_voting.model.Restaurant;
 
 import java.util.List;
@@ -14,4 +16,8 @@ public interface RestaurantRepository extends BaseRepository<Restaurant>{
 
     @Query("SELECT r FROM Restaurant r WHERE r.id = :restaurantId ORDER BY r.name")
     Optional<Restaurant> get(int restaurantId);
+
+    @EntityGraph(attributePaths = {"menu"}, type = EntityGraph.EntityGraphType.LOAD)
+    @Query("SELECT r FROM Restaurant r WHERE r.id= :id")
+    List<Menu> getWithMenus(int id);
 }

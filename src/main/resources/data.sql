@@ -13,7 +13,7 @@ VALUES ('USER', 1),
 
 INSERT INTO RESTAURANT(name)
 VALUES ('Pandas'),
-       ('Millenium');
+       ('Millennium');
 
 INSERT INTO VOTE(restaurant_id, user_id)
 VALUES (1, 1),
