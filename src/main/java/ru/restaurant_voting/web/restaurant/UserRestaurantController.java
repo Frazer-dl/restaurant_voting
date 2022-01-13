@@ -35,6 +35,11 @@ public class UserRestaurantController {
         return ResponseEntity.of(restaurantService.get(authUser.id(), id));
     }
 
+    @GetMapping("/{id}/withMenus")
+    public Restaurant getWithMenus(@AuthenticationPrincipal AuthUser authUser, @PathVariable int id) {
+        return restaurantService.getWithMenus(authUser.id(), id);
+    }
+
     @GetMapping
     @Cacheable
     public List<Restaurant> getAll(@AuthenticationPrincipal AuthUser authUser) {

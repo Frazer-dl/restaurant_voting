@@ -45,4 +45,9 @@ public class RestaurantService {
         log.info("save restaurant {} by admin", restaurant);
         return restaurantRepository.save(restaurant);
     }
+
+    public Restaurant getWithMenus(int id, int restaurantId) {
+        log.info("getWithMenus restaurant {} by user {}", restaurantId, id);
+        return restaurantRepository.getWithMenus(id);
+    }
 }
