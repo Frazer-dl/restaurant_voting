@@ -1,5 +1,5 @@
 ## Restaurant voting
-For project check use [swagger api](http://localhost:8080/swagger-ui/index.html#/) as well postman with [JSON](https://www.getpostman.com/collections/c61a85e37b527108de63) after download and run app.
+To get familiar with the functionality use [swagger api](http://localhost:8080/swagger-ui/index.html#/) as well postman with [JSON](https://www.getpostman.com/collections/c61a85e37b527108de63) after download and run app.
 ----
 Design and implement a REST API using Hibernate/Spring/SpringMVC (or Spring-Boot) **without frontend**.
 
