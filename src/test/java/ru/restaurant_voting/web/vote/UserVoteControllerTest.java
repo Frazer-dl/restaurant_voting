@@ -24,16 +24,6 @@ class UserVoteControllerTest extends AbstractControllerTest {
     VoteRepository voteRepository;
 
     @Test
-    @WithUserDetails(value = UserTestData.USER_MAIL)
-    void getMostPopularRestaurantName() throws Exception {
-        perform(MockMvcRequestBuilders.get(REST_URL + "/top=2"))
-                .andExpect(status().isOk())
-                .andDo(print())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(RestaurantTestData.RESTAURANT_MATCHER.contentJson(RestaurantTestData.restaurant_1, RestaurantTestData.restaurant_2));
-    }
-
-    @Test
     @WithUserDetails(value = UserTestData.USER_2_MAIL)
     void create() throws Exception {
         voteRepository.delete(VoteTestData.VOTE_3_ID);

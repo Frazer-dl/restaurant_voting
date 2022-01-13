@@ -49,4 +49,14 @@ class UserRestaurantControllerTest extends AbstractControllerTest {
         RestaurantTestData.RESTAURANT_MATCHER.assertMatch(restaurant, RestaurantTestData.restaurant_1);
         MenuTestData.MENU_MATCHER.assertMatch(restaurant.getMenu(), MenuTestData.menus_1);
     }
+
+    @Test
+    @WithUserDetails(value = UserTestData.USER_MAIL)
+    void getMostPopularRestaurantName() throws Exception {
+        perform(MockMvcRequestBuilders.get(REST_URL + "/top=2"))
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(RestaurantTestData.RESTAURANT_MATCHER.contentJson(RestaurantTestData.restaurant_1, RestaurantTestData.restaurant_2));
+    }
 }

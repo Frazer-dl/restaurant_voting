@@ -45,4 +45,9 @@ public class UserRestaurantController {
     public List<Restaurant> getAll(@AuthenticationPrincipal AuthUser authUser) {
         return restaurantService.getAll(authUser.id());
     }
+
+    @GetMapping("/top={q}")
+    public List<Restaurant> getMostPopularRestaurantName(@PathVariable int q) {
+        return restaurantService.getMostPopularRestaurant(q);
+    }
 }

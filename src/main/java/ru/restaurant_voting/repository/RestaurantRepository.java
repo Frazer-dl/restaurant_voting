@@ -19,4 +19,8 @@ public interface RestaurantRepository extends BaseRepository<Restaurant>{
     @EntityGraph(attributePaths = {"menu"}, type = EntityGraph.EntityGraphType.LOAD)
     @Query("SELECT r FROM Restaurant r WHERE r.id= :id")
     Restaurant getWithMenus(int id);
+
+    @Query(value = "SELECT r.* FROM Vote v JOIN Restaurant r on v.RESTAURANT_ID = r.ID " +
+            "group by v.RESTAURANT_ID ORDER BY COUNT(RESTAURANT_ID) DESC LIMIT :q", nativeQuery = true)
+    List<Restaurant> getMostPopularRestaurant(int q);
 }

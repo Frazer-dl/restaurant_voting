@@ -50,4 +50,9 @@ public class RestaurantService {
         log.info("getWithMenus restaurant {} by user {}", restaurantId, id);
         return restaurantRepository.getWithMenus(id);
     }
+
+    public List<Restaurant> getMostPopularRestaurant(int quantity) {
+        log.info("getMostPopularRestaurant top {} ", quantity);
+        return restaurantRepository.getMostPopularRestaurant(quantity);
+    }
 }
