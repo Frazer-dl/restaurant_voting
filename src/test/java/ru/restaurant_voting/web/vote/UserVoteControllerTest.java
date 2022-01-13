@@ -4,7 +4,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithUserDetails;
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import ru.restaurant_voting.model.Vote;
 import ru.restaurant_voting.repository.VoteRepository;
 import ru.restaurant_voting.web.AbstractControllerTest;
 import ru.restaurant_voting.web.restaurant.RestaurantTestData;
@@ -35,21 +37,25 @@ class UserVoteControllerTest extends AbstractControllerTest {
     @WithUserDetails(value = UserTestData.USER_2_MAIL)
     void create() throws Exception {
         voteRepository.delete(VoteTestData.VOTE_3_ID);
-        perform(MockMvcRequestBuilders.put(REST_URL + "/1"))
+        ResultActions actions = perform(MockMvcRequestBuilders.put(REST_URL + "/1"))
                 .andExpect(status().isOk())
                 .andDo(print())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(VoteTestData.VOTE_MATCHER.contentJson(VoteTestData.USER_3_VOTE_FOR_RESTAURANT_1));
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
+        Vote vote = VoteTestData.VOTE_MATCHER.readFromJson(actions);
+        RestaurantTestData.RESTAURANT_MATCHER.assertMatch(vote.getRestaurant(), VoteTestData.USER_2_VOTE_FOR_RESTAURANT_1.getRestaurant());
+        UserTestData.USER_MATCHER.assertMatch(vote.getUser(), VoteTestData.USER_2_VOTE_FOR_RESTAURANT_1.getUser());
     }
 
     @Test
     @WithUserDetails(value = UserTestData.USER_MAIL)
     void update() throws Exception {
-        perform(MockMvcRequestBuilders.put(REST_URL + "/2"))
+        ResultActions actions = perform(MockMvcRequestBuilders.put(REST_URL + "/2"))
                 .andExpect(status().isOk())
                 .andDo(print())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(VoteTestData.VOTE_MATCHER.contentJson(VoteTestData.USER_1_VOTE_FOR_RESTAURANT_2));
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
+        Vote vote = VoteTestData.VOTE_MATCHER.readFromJson(actions);
+        RestaurantTestData.RESTAURANT_MATCHER.assertMatch(vote.getRestaurant(), VoteTestData.USER_1_VOTE_FOR_RESTAURANT_2.getRestaurant());
+        UserTestData.USER_MATCHER.assertMatch(vote.getUser(), VoteTestData.USER_1_VOTE_FOR_RESTAURANT_2.getUser());
     }
 
     @Test

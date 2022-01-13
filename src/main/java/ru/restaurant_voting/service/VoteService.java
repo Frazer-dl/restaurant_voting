@@ -7,11 +7,14 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.restaurant_voting.error.IllegalRequestDataException;
 import ru.restaurant_voting.model.Restaurant;
 import ru.restaurant_voting.model.Vote;
+import ru.restaurant_voting.repository.RestaurantRepository;
+import ru.restaurant_voting.repository.UserRepository;
 import ru.restaurant_voting.repository.VoteRepository;
 import ru.restaurant_voting.util.DateTimeUtil;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 @Slf4j
@@ -19,6 +22,8 @@ import java.util.List;
 public class VoteService {
 
     private final VoteRepository voteRepository;
+    private final RestaurantRepository restaurantRepository;
+    private final UserRepository userRepository;
 
     @Transactional
     public Vote setVote(int id, int restaurantId) {
@@ -32,12 +37,12 @@ public class VoteService {
             }
         }
         log.info("setVote for restaurant {} from user {}", restaurantId, id);
-        return voteRepository.save(new Vote(null, id, restaurantId));
+        return voteRepository.save(new Vote(null, userRepository.getById(id), restaurantRepository.getById(restaurantId)));
     }
 
     public Vote updateVote(Vote vote, int id, int restaurantId) {
         log.info("updateVote for restaurant {} from user {}", restaurantId, id);
-        vote.setRestaurantId(restaurantId);
+        vote.setRestaurant(restaurantRepository.getById(restaurantId));
         return vote;
     }
 
@@ -47,9 +52,10 @@ public class VoteService {
     }
 
     public List<Restaurant> getMostPopularRestaurant(int quantity) {
-        int q = quantity;
+        AtomicInteger q = new AtomicInteger(quantity);
         List<Restaurant> restaurantNames = voteRepository.getMostPopularRestaurant();
-        if (restaurantNames.size() < q) q = restaurantNames.size();
-        return restaurantNames.subList(0, q);
+        AtomicInteger size = new AtomicInteger(restaurantNames.size());
+        if (size.get() < q.get()) q = size;
+        return restaurantNames.subList(0, q.intValue());
     }
 }

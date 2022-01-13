@@ -8,10 +8,7 @@ import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
@@ -22,32 +19,34 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Vote extends BaseEntity {
 
-    @Column(name = "user_id", nullable = false)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @NotNull
-    private Integer userId;
+    private User user;
 
-    @Column(name = "restaurant_id", nullable = false)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "restaurant_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @NotNull
-    private Integer restaurantId;
+    private Restaurant restaurant;
 
     @Column(name = "date_time", nullable = false, columnDefinition = "timestamp default now()")
     @NotNull
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private LocalDateTime dateTime;
 
-    public Vote(Integer id, Integer userId, Integer restaurantId) {
+    public Vote(Integer id, User user, Restaurant restaurant) {
         super(id);
-        this.userId = userId;
-        this.restaurantId = restaurantId;
+        this.user = user;
+        this.restaurant = restaurant;
         this.dateTime = LocalDateTime.now();
     }
 
-    public Vote(Integer id, Integer userId, Integer restaurantId, LocalDateTime dateTime) {
+    public Vote(Integer id, User user, Restaurant restaurant, LocalDateTime dateTime) {
         super(id);
-        this.userId = userId;
-        this.restaurantId = restaurantId;
+        this.user = user;
+        this.restaurant = restaurant;
         this.dateTime = dateTime;
     }
 
@@ -55,8 +54,8 @@ public class Vote extends BaseEntity {
     public String toString() {
         return "Vote{" +
                 "id=" + id +
-                ", userId=" + userId +
-                ", restaurantId=" + restaurantId +
+                ", userId=" + user +
+                ", restaurantId=" + restaurant +
                 '}';
     }
 }

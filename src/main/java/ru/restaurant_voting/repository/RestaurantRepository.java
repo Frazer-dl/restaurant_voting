@@ -3,7 +3,6 @@ package ru.restaurant_voting.repository;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
-import ru.restaurant_voting.model.Menu;
 import ru.restaurant_voting.model.Restaurant;
 
 import java.util.List;

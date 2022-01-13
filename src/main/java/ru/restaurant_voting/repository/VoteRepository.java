@@ -14,15 +14,15 @@ public interface VoteRepository extends BaseRepository<Vote> {
     @Query("SELECT v FROM Vote v ORDER BY v.dateTime")
     List<Vote> getAll();
 
-    @Query("SELECT v FROM Vote v WHERE v.userId = :userId")
+    @Query("SELECT v FROM Vote v WHERE v.user.id = :userId")
     Optional<Vote> getByUserId(int userId);
 
-    @Query("SELECT v FROM Vote v WHERE v.restaurantId = :restaurantId")
+    @Query("SELECT v FROM Vote v WHERE v.restaurant.id = :restaurantId")
     List<Vote> getByRestaurantId(int restaurantId);
 
     @Query("SELECT v FROM  Vote v WHERE v.dateTime >= :startDate AND v.dateTime < :endDate ORDER BY v.dateTime")
     List<Vote> getBetweenHalfOpen(LocalDateTime startDate, LocalDateTime endDate);
 
-    @Query("SELECT r FROM Vote AS v INNER JOIN Restaurant r on r.id = v.restaurantId GROUP BY r.name ORDER BY COUNT(v.restaurantId) desc")
+    @Query("SELECT r FROM Vote AS v INNER JOIN Restaurant r on r.id = v.restaurant.id GROUP BY r.name ORDER BY COUNT(v.restaurant.id) desc")
     List<Restaurant> getMostPopularRestaurant();
 }
