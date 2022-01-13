@@ -24,8 +24,8 @@ public class VoteService {
     public Vote setVote(int id, int restaurantId) {
         if (voteRepository.getByUserId(id).isPresent()) {
             Vote vote = voteRepository.getByUserId(id).get();
-            if (DateTimeUtil.isUserVoteInTime(LocalDateTime.now(), vote.getDate())) {
-                System.out.println(vote.getDate());
+            if (DateTimeUtil.isUserVoteInTime(LocalDateTime.now(), vote.getDateTime())) {
+                System.out.println(vote.getDateTime());
                 return updateVote(vote, id, restaurantId);
             } else {
                 throw new IllegalRequestDataException("Can't update vote it's too late");

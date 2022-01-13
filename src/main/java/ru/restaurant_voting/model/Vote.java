@@ -5,6 +5,8 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -21,30 +23,32 @@ import java.time.LocalDateTime;
 public class Vote extends BaseEntity {
 
     @Column(name = "user_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @NotNull
     private Integer userId;
 
     @Column(name = "restaurant_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @NotNull
     private Integer restaurantId;
 
-    @Column(name = "date", nullable = false, columnDefinition = "timestamp default now()")
+    @Column(name = "date_time", nullable = false, columnDefinition = "timestamp default now()")
     @NotNull
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    LocalDateTime date;
+    private LocalDateTime dateTime;
 
     public Vote(Integer id, Integer userId, Integer restaurantId) {
         super(id);
         this.userId = userId;
         this.restaurantId = restaurantId;
-        this.date = LocalDateTime.now();
+        this.dateTime = LocalDateTime.now();
     }
 
-    public Vote(Integer id, Integer userId, Integer restaurantId, LocalDateTime localDateTime) {
+    public Vote(Integer id, Integer userId, Integer restaurantId, LocalDateTime dateTime) {
         super(id);
         this.userId = userId;
         this.restaurantId = restaurantId;
-        this.date = localDateTime;
+        this.dateTime = dateTime;
     }
 
     @Override

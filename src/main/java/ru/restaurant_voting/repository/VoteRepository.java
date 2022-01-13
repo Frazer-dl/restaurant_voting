@@ -11,7 +11,7 @@ import java.util.Optional;
 
 @Transactional(readOnly = true)
 public interface VoteRepository extends BaseRepository<Vote> {
-    @Query("SELECT v FROM Vote v ORDER BY v.date")
+    @Query("SELECT v FROM Vote v ORDER BY v.dateTime")
     List<Vote> getAll();
 
     @Query("SELECT v FROM Vote v WHERE v.userId = :userId")
@@ -20,7 +20,7 @@ public interface VoteRepository extends BaseRepository<Vote> {
     @Query("SELECT v FROM Vote v WHERE v.restaurantId = :restaurantId")
     List<Vote> getByRestaurantId(int restaurantId);
 
-    @Query("SELECT v FROM  Vote v WHERE v.date >= :startDate AND v.date < :endDate ORDER BY v.date")
+    @Query("SELECT v FROM  Vote v WHERE v.dateTime >= :startDate AND v.dateTime < :endDate ORDER BY v.dateTime")
     List<Vote> getBetweenHalfOpen(LocalDateTime startDate, LocalDateTime endDate);
 
     @Query("SELECT r FROM Vote AS v INNER JOIN Restaurant r on r.id = v.restaurantId GROUP BY r.name ORDER BY COUNT(v.restaurantId) desc")

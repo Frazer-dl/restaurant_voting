@@ -8,7 +8,7 @@ import ru.restaurant_voting.web.user.UserTestData;
 import java.time.LocalDateTime;
 
 public class VoteTestData {
-    public static final MatcherFactory.Matcher<Vote> VOTE_MATCHER = MatcherFactory.usingIgnoringFieldsComparator(Vote.class, "date");
+    public static final MatcherFactory.Matcher<Vote> VOTE_MATCHER = MatcherFactory.usingIgnoringFieldsComparator(Vote.class, "dateTime");
 
     public static final int VOTE_1_ID = 1;
     public static final int VOTE_2_ID = 2;
