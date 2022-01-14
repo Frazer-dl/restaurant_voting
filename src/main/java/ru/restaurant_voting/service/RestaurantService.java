@@ -48,7 +48,7 @@ public class RestaurantService {
 
     public Restaurant getWithMenus(int id, int restaurantId) {
         log.info("getWithMenus restaurant {} by user {}", restaurantId, id);
-        return restaurantRepository.getWithMenus(id);
+        return restaurantRepository.getWithMenus(restaurantId);
     }
 
     public List<Restaurant> getMostPopularRestaurant(int quantity) {
