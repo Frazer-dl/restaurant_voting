@@ -5,7 +5,7 @@ import ru.restaurant_voting.web.MatcherFactory;
 import ru.restaurant_voting.web.restaurant.RestaurantTestData;
 import ru.restaurant_voting.web.user.UserTestData;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 public class VoteTestData {
     public static final MatcherFactory.Matcher<Vote> VOTE_MATCHER = MatcherFactory.usingIgnoringFieldsComparator(Vote.class, "dateTime");
@@ -23,6 +23,6 @@ public class VoteTestData {
     public static final Vote ILLEGAL_VOTE = new Vote(null, null, null);
 
     public static Vote getNew() {
-        return new Vote(null, UserTestData.user3, RestaurantTestData.restaurant_2, LocalDateTime.now().minusDays(2L));
+        return new Vote(null, UserTestData.user3, RestaurantTestData.restaurant_2, LocalDate.now().minusDays(2L));
     }
 }

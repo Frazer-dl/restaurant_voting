@@ -39,8 +39,8 @@ class AdminVoteControllerTest extends AbstractControllerTest {
                 VoteTestData.ADMIN_VOTE_FOR_RESTAURANT_1, VoteTestData.USER_2_VOTE_FOR_RESTAURANT_2);
         List<Vote> actual = JsonUtil.readValues(actions.andReturn().getResponse().getContentAsString(), Vote.class);
         actual.forEach(vote -> {
-            RestaurantTestData.RESTAURANT_MATCHER.assertMatch(vote.getRestaurant(), expected.get(vote.getId()-1).getRestaurant());
-            UserTestData.USER_MATCHER.assertMatch(vote.getUser(), expected.get(vote.getId()-1).getUser());
+            RestaurantTestData.RESTAURANT_MATCHER.assertMatch(vote.getRestaurant(), expected.get(vote.getId() - 1).getRestaurant());
+            UserTestData.USER_MATCHER.assertMatch(vote.getUser(), expected.get(vote.getId() - 1).getUser());
         });
     }
 

@@ -8,28 +8,25 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import ru.restaurant_voting.model.Vote;
 import ru.restaurant_voting.repository.VoteRepository;
-import ru.restaurant_voting.service.VoteService;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
 @RequestMapping(value = AdminVoteController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 @Slf4j
-@CacheConfig(cacheNames = "vote")
+@CacheConfig(cacheNames = "votes")
 public class AdminVoteController {
 
-    static final String REST_URL = "/api/admin/vote";
+    static final String REST_URL = "/api/admin/votes";
 
     private final VoteRepository voteRepository;
-    private final VoteService voteService;
 
-    public AdminVoteController(VoteRepository voteRepository, VoteService voteService) {
+    public AdminVoteController(VoteRepository voteRepository) {
         this.voteRepository = voteRepository;
-        this.voteService = voteService;
     }
 
-    @GetMapping()
+    @GetMapping
     @Cacheable
     public List<Vote> getAll() {
         return voteRepository.getAll();
@@ -41,13 +38,13 @@ public class AdminVoteController {
     }
 
     @GetMapping("/user={id}")
-    public Vote getByUserId(@PathVariable int id) {
-        return voteRepository.getByUserId(id).get();
+    public List<Vote> getByUserId(@PathVariable int id) {
+        return voteRepository.getByUserId(id);
     }
 
     @GetMapping("/date")
     @Cacheable
-    public List<Vote> getByDate(@RequestParam("dateTime") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime date) {
-        return voteService.getBetweenHalfOpen(date);
+    public List<Vote> getByDate(@RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+        return voteRepository.getByDate(date);
     }
 }

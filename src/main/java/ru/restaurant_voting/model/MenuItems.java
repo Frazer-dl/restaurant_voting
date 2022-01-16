@@ -1,6 +1,7 @@
 package ru.restaurant_voting.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,27 +13,24 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "menu")
+@Table(name = "menu_items", uniqueConstraints = {@UniqueConstraint(name = "menu_restaurant_date_name_idx", columnNames = {"restaurant_id", "date", "name"})})
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Menu extends BaseEntity {
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class MenuItems extends NamedEntity {
 
-    @Column(name = "name", nullable = false)
-    @NotBlank
-    @Size(min = 2, max = 120)
-    private String name;
-
-    @Column(name = "date_time", nullable = false, columnDefinition = "timestamp default now()", updatable = false)
+    @Column(name = "date", nullable = false, columnDefinition = "DATE DEFAULT CURRENT_DATE")
     @NotNull
-    private LocalDateTime dateTime;
+    private LocalDate date;
 
-    @Column(name = "price")
+    @Column(name = "price", nullable = false)
     @NotNull
-    private Integer price;
+    private int price;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "restaurant_id", nullable = false)
@@ -41,10 +39,10 @@ public class Menu extends BaseEntity {
     @NotNull
     private Restaurant restaurant;
 
-    public Menu(Integer id, String name, LocalDateTime dateTime, Integer price, Restaurant restaurant) {
-        super(id);
+    public MenuItems(Integer id, String name, LocalDate date, Integer price, Restaurant restaurant) {
+        this.id = id;
         this.name = name;
-        this.dateTime = dateTime;
+        this.date = date;
         this.price = price;
         this.restaurant = restaurant;
     }

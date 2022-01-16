@@ -11,6 +11,7 @@ import ru.restaurant_voting.repository.UserRepository;
 import ru.restaurant_voting.repository.VoteRepository;
 import ru.restaurant_voting.util.DateTimeUtil;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -24,10 +25,10 @@ public class VoteService {
     private final UserRepository userRepository;
 
     @Transactional
-    public Vote setVote(int id, int restaurantId) {
-        if (voteRepository.getByUserId(id).isPresent()) {
-            Vote vote = voteRepository.getByUserId(id).get();
-            if (DateTimeUtil.isUserVoteInTime(LocalDateTime.now(), vote.getDateTime())) {
+    public Vote save(int id, int restaurantId) {
+        if (voteRepository.getByUserIdForToDay(id).isPresent()) {
+            Vote vote = voteRepository.getByUserIdForToDay(id).get();
+            if (DateTimeUtil.isUserVoteInTime(LocalDateTime.now(), vote.getDate())) {
                 return updateVote(vote, id, restaurantId);
             } else {
                 throw new IllegalRequestDataException("Can't update vote it's too late");
@@ -41,10 +42,5 @@ public class VoteService {
         log.info("updateVote for restaurant {} from user {}", restaurantId, id);
         vote.setRestaurant(restaurantRepository.getById(restaurantId));
         return vote;
-    }
-
-    public List<Vote> getBetweenHalfOpen(LocalDateTime dateTime) {
-        return voteRepository.getBetweenHalfOpen(DateTimeUtil.getStartDate(dateTime),
-                DateTimeUtil.getEndDate(dateTime));
     }
 }

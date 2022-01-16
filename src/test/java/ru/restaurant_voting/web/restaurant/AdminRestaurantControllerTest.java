@@ -19,7 +19,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 class AdminRestaurantControllerTest extends AbstractControllerTest {
 
-    static final String REST_URL = "/api/admin/restaurant";
+    static final String REST_URL = "/api/admin/restaurants";
 
     @Autowired
     private RestaurantRepository restaurantRepository;

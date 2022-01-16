@@ -16,7 +16,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 class UserRestaurantControllerTest extends AbstractControllerTest {
 
-    static final String REST_URL = "/api/profile/restaurant";
+    static final String REST_URL = "/api/profile/restaurants";
 
     @Test
     @WithUserDetails(value = UserTestData.USER_MAIL)

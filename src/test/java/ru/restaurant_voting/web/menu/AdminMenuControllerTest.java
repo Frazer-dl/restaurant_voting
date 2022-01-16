@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import ru.restaurant_voting.model.Menu;
+import ru.restaurant_voting.model.MenuItems;
 import ru.restaurant_voting.repository.MenuRepository;
 import ru.restaurant_voting.util.JsonUtil;
 import ru.restaurant_voting.web.AbstractControllerTest;
@@ -20,7 +20,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 class AdminMenuControllerTest extends AbstractControllerTest {
 
-    static final String REST_URL_FOR_RESTAURANT_1 = "/api/admin/restaurant/1/menu";
+    static final String REST_URL_FOR_RESTAURANT_1 = "/api/admin/restaurant/1/menus";
 
     @Autowired
     MenuRepository menuRepository;
@@ -38,8 +38,8 @@ class AdminMenuControllerTest extends AbstractControllerTest {
     @Test
     @WithUserDetails(value = UserTestData.ADMIN_MAIL)
     void create() throws Exception {
-        Menu newMenu = MenuTestData.getNew();
-        List<Menu> newMenus = List.of(newMenu);
+        MenuItems newMenu = MenuTestData.getNew();
+        List<MenuItems> newMenus = List.of(newMenu);
         perform(MockMvcRequestBuilders.post(REST_URL_FOR_RESTAURANT_1)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(newMenus)))
@@ -52,8 +52,8 @@ class AdminMenuControllerTest extends AbstractControllerTest {
     @Test
     @WithUserDetails(value = UserTestData.ADMIN_MAIL)
     void update() throws Exception {
-        Menu updated = MenuTestData.getUpdated();
-        List<Menu> updatedMenus = List.of(updated);
+        MenuItems updated = MenuTestData.getUpdated();
+        List<MenuItems> updatedMenus = List.of(updated);
         perform(MockMvcRequestBuilders.put(REST_URL_FOR_RESTAURANT_1)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(updatedMenus)))

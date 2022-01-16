@@ -8,28 +8,29 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.restaurant_voting.model.Menu;
-import ru.restaurant_voting.service.MenuService;
+import ru.restaurant_voting.model.MenuItems;
+import ru.restaurant_voting.repository.MenuRepository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
 @RequestMapping(value = UserMenuController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 @Slf4j
-@CacheConfig(cacheNames = "menu")
+@CacheConfig(cacheNames = "menus")
 public class UserMenuController {
 
-    static final String REST_URL = "/api/profile/restaurant/{id}/menu";
+    static final String REST_URL = "/api/restaurants/{id}/menu-items";
 
-    private final MenuService menuService;
+    private final MenuRepository menuRepository;
 
-    public UserMenuController(MenuService menuService) {
-        this.menuService = menuService;
+    public UserMenuController(MenuRepository menuRepository) {
+        this.menuRepository = menuRepository;
     }
 
-    @GetMapping("/today")
+    @GetMapping
     @Cacheable
-    public List<Menu> getAllMenuForToDay(@PathVariable int id) {
-        return menuService.getAllForToDay(id);
+    public List<MenuItems> getAll(@PathVariable int id) {
+        return menuRepository.getAll(LocalDate.now(), id);
     }
 }
