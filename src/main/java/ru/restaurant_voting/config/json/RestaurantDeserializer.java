@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.util.List;
 
 public class RestaurantDeserializer extends StdDeserializer<Restaurant> {
+
     public RestaurantDeserializer() {
         this(null);
     }

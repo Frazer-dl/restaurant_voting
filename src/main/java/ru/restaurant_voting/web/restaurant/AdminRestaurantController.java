@@ -4,51 +4,37 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import ru.restaurant_voting.error.IllegalRequestDataException;
 import ru.restaurant_voting.model.Restaurant;
-import ru.restaurant_voting.repository.RestaurantRepository;
 import ru.restaurant_voting.util.validation.ValidationUtil;
 
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping(value = AdminRestaurantController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 @Slf4j
 @CacheConfig(cacheNames = "restaurants")
-public class AdminRestaurantController {
+public class AdminRestaurantController extends AbstractRestaurantController {
 
     static final String REST_URL = "/api/admin/restaurants";
 
-    private final RestaurantRepository restaurantRepository;
-
-    public AdminRestaurantController(RestaurantRepository restaurantRepository) {
-        this.restaurantRepository = restaurantRepository;
-    }
-
-    @GetMapping()
+    @GetMapping
     @Cacheable
     public List<Restaurant> getAll() {
-        return restaurantRepository.findAll(Sort.by(Sort.Direction.ASC, "name"));
+        return super.getAll();
     }
 
     @GetMapping("/{id}")
+    @Cacheable
     public Restaurant get(@PathVariable int id) {
-        Optional<Restaurant> restaurant = restaurantRepository.findById(id);
-        if (restaurant.isPresent()) {
-            return restaurant.get();
-        } else {
-            throw new IllegalRequestDataException("Restaurant with id=" + id + " not exist.");
-        }
+        return super.get(id);
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)

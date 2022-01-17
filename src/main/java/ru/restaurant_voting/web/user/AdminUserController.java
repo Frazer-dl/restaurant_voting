@@ -3,7 +3,6 @@ package ru.restaurant_voting.web.user;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -40,7 +39,7 @@ public class AdminUserController extends AbstractUserController {
     }
 
     @GetMapping
-    @Cacheable
+    @CacheEvict(allEntries = true)
     public List<User> getAll() {
         log.info("getAll");
         return repository.findAll(Sort.by(Sort.Direction.ASC, "name", "email"));

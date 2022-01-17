@@ -25,7 +25,9 @@ import org.springframework.context.annotation.Configuration;
                         App for restaurants voting
                         <p><b>Test credentials:</b><br>
                         - user@yandex.ru / password<br>
-                        - admin@gmail.com / admin</p>
+                        - admin@gmail.com / admin<br>
+                        - user2@yandex.ru / password<br>
+                        - user3@yandex.ru / password</p>
                         """,
                 contact = @Contact(url = "https://github.com/Frazer-dl", name = "Genov Konstantin")
         ),

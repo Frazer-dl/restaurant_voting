@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 
 public class VoteDeserializer extends StdDeserializer<Vote> {
+
     public VoteDeserializer() {
         this(null);
     }

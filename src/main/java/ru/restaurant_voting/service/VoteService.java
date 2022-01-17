@@ -34,7 +34,7 @@ public class VoteService {
         return voteRepository.save(new Vote(null, userRepository.getById(id), restaurantRepository.getById(restaurantId)));
     }
 
-    public Vote updateVote(Vote vote, int id, int restaurantId) {
+    private Vote updateVote(Vote vote, int id, int restaurantId) {
         log.info("updateVote for restaurant {} from user {}", restaurantId, id);
         vote.setRestaurant(restaurantRepository.getById(restaurantId));
         return vote;

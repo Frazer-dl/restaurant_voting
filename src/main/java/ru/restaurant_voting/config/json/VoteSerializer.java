@@ -9,6 +9,7 @@ import ru.restaurant_voting.model.Vote;
 import java.io.IOException;
 
 public class VoteSerializer extends StdSerializer<Vote> {
+
     public VoteSerializer() {
         this(null);
     }
@@ -18,9 +19,7 @@ public class VoteSerializer extends StdSerializer<Vote> {
     }
 
     @Override
-    public void serialize(
-            Vote value, JsonGenerator jgen, SerializerProvider provider)
-            throws IOException, JsonProcessingException {
+    public void serialize(Vote value, JsonGenerator jgen, SerializerProvider provider) throws IOException, JsonProcessingException {
         jgen.writeStartObject();
         jgen.writeNumberField("id", value.getId());
         jgen.writeStringField("user-id", value.getUser().getId().toString());

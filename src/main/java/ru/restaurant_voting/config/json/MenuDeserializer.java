@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 
 public class MenuDeserializer extends StdDeserializer<MenuItem> {
+
     public MenuDeserializer() {
         this(null);
     }

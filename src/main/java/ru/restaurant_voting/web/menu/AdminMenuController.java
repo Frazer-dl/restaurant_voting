@@ -26,7 +26,7 @@ import java.util.List;
 @RequestMapping(value = AdminMenuController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 @Slf4j
 @CacheConfig(cacheNames = "menus")
-public class AdminMenuController {
+public class AdminMenuController extends AbstractMenuController {
 
     static final String REST_URL = "/api/admin/restaurants/{id}/menu-item";
 
@@ -47,13 +47,13 @@ public class AdminMenuController {
     @GetMapping
     @Cacheable
     public List<MenuItem> getAll(@PathVariable int id) {
-        return menuRepository.getAll(LocalDate.now(), id);
+        return super.getAll(id);
     }
 
     @GetMapping("/{menuId}")
     @Cacheable
-    public MenuItem get(@PathVariable int menuId) {
-        return menuRepository.findById(menuId).get();
+    public MenuItem get(@PathVariable int menuId, @PathVariable int id) {
+        return menuRepository.getWithRestaurant(menuId, id);
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)

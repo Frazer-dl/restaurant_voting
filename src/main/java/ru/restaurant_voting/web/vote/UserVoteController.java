@@ -16,6 +16,7 @@ import ru.restaurant_voting.service.VoteService;
 import ru.restaurant_voting.web.AuthUser;
 
 import java.net.URI;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -55,6 +56,18 @@ public class UserVoteController {
             return vote.get();
         } else {
             throw new IllegalRequestDataException("This user have not voted yet for today.");
+        }
+    }
+
+    @GetMapping("/history")
+    @Cacheable
+    public List<Vote> getHistory(@AuthenticationPrincipal AuthUser authUser) {
+        int userId = authUser.id();
+        Optional<List<Vote>> votes = voteRepository.getHistory(userId);
+        if (votes.isPresent()) {
+            return votes.get();
+        } else {
+            throw new IllegalRequestDataException("This user have not voted yet.");
         }
     }
 }
