@@ -22,9 +22,18 @@ public class MenuSerializer extends StdSerializer<MenuItem> {
             MenuItem value, JsonGenerator jgen, SerializerProvider provider)
             throws IOException, JsonProcessingException {
         jgen.writeStartObject();
-        jgen.writeNumberField("id", value.getId());
+        try {
+            jgen.writeNumberField("id", value.getId());
+        } catch (Exception ignored) {
+        }
         jgen.writeStringField("name", value.getName());
         jgen.writeNumberField("price", value.getPrice());
+        try {
+            if (!(value.getRestaurant() == null)) {
+                jgen.writeObjectField("restaurant", value.getRestaurant().toString());
+            }
+        } catch (Exception ignored) {
+        }
         jgen.writeEndObject();
     }
 }

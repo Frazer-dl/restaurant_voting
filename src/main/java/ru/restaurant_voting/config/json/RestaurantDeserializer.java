@@ -25,7 +25,12 @@ public class RestaurantDeserializer extends StdDeserializer<Restaurant> {
     @Override
     public Restaurant deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException, JacksonException {
         JsonNode jsonNode = jp.getCodec().readTree(jp);
-        Integer id = Integer.parseInt(String.valueOf(jsonNode.get("id")));
+        Integer id;
+        try {
+            id = Integer.parseInt(String.valueOf(jsonNode.get("id")));
+        } catch (Exception e) {
+            id = null;
+        }
         String name = jsonNode.get("name").asText();
         ObjectMapper objectMapper = new ObjectMapper();
         JavaType customClassCollection = objectMapper.getTypeFactory().constructCollectionType(List.class, MenuItem.class);

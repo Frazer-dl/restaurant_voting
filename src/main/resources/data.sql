@@ -19,8 +19,7 @@ VALUES ('Pandas'),
 INSERT INTO VOTE(restaurant_id, user_id)
 VALUES (1, 1),
        (1, 2),
-       (2, 3),
-       (3, 4);
+       (2, 3);
 
 INSERT INTO VOTE(restaurant_id, user_id, date)
 VALUES (2, 1, '2020-01-30'),

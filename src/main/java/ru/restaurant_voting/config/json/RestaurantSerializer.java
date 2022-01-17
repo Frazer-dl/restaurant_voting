@@ -22,7 +22,9 @@ public class RestaurantSerializer extends StdSerializer<Restaurant> {
             Restaurant value, JsonGenerator jgen, SerializerProvider provider)
             throws IOException, JsonProcessingException {
         jgen.writeStartObject();
-        jgen.writeNumberField("id", value.getId());
+        if (!(value.getId() == null)) {
+            jgen.writeNumberField("id", value.getId());
+        }
         jgen.writeStringField("name", value.getName());
         try {
             if (!(value.getMenu().isEmpty() || value.getMenu() == null)) {

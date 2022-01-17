@@ -11,13 +11,8 @@ public class VoteTestData {
     public static final MatcherFactory.Matcher<Vote> VOTE_MATCHER = MatcherFactory.usingIgnoringFieldsComparator(Vote.class, "dateTime");
 
     public static final int VOTE_1_ID = 1;
-    public static final int VOTE_2_ID = 2;
     public static final int VOTE_3_ID = 3;
     public static final int VOTE_4_ID = 4;
-
-    public static final Vote USER_1_VOTE_FOR_RESTAURANT_1 = new Vote(VOTE_1_ID, UserTestData.user, RestaurantTestData.restaurant_1);
-    public static final Vote ADMIN_VOTE_FOR_RESTAURANT_1 = new Vote(VOTE_2_ID, UserTestData.admin, RestaurantTestData.restaurant_1);
-    public static final Vote USER_2_VOTE_FOR_RESTAURANT_2 = new Vote(VOTE_3_ID, UserTestData.user2, RestaurantTestData.restaurant_2);
     public static final Vote USER_2_VOTE_FOR_RESTAURANT_1 = new Vote(VOTE_4_ID, UserTestData.user2, RestaurantTestData.restaurant_1);
     public static final Vote USER_1_VOTE_FOR_RESTAURANT_2 = new Vote(VOTE_1_ID, UserTestData.user, RestaurantTestData.restaurant_2);
     public static final Vote ILLEGAL_VOTE = new Vote(null, null, null);

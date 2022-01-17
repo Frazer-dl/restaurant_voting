@@ -13,13 +13,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 class UserMenuControllerTest extends AbstractControllerTest {
 
-    private static final String REST_URL_FOR_RESTAURANT_1 = "/api/profile/restaurant/1/menus";
+    private static final String REST_URL_FOR_RESTAURANT_1 = "/api/restaurants/1/menu-item";
 
     @Test
     @WithUserDetails(value = UserTestData.USER_MAIL)
     void getAllMenuForToDay() throws Exception {
         MenuTestData.MENU_MATCHER.contentJson(MenuTestData.menu_1, MenuTestData.menu_2);
-        perform(MockMvcRequestBuilders.get(REST_URL_FOR_RESTAURANT_1 + "/today"))
+        perform(MockMvcRequestBuilders.get(REST_URL_FOR_RESTAURANT_1))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))

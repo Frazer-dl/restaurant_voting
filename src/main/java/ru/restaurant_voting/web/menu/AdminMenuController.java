@@ -28,7 +28,7 @@ import java.util.List;
 @CacheConfig(cacheNames = "menus")
 public class AdminMenuController {
 
-    static final String REST_URL = "/api/admin/restaurants/{id}/menu-items";
+    static final String REST_URL = "/api/admin/restaurants/{id}/menu-item";
 
     private final MenuRepository menuRepository;
     private final RestaurantRepository restaurantRepository;

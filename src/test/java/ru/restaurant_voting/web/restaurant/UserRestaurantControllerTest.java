@@ -46,11 +46,7 @@ class UserRestaurantControllerTest extends AbstractControllerTest {
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
-        Restaurant deserialized = RestaurantTestData.RESTAURANT_MATCHER.readFromJson(actions);
-        Restaurant restaurant = new Restaurant(RestaurantTestData.RESTAURANT_MATCHER.readFromJson(actions));
-        restaurant.setMenu(deserialized.getMenu());
-        restaurant.setId(deserialized.getId());
-        restaurant.setName(deserialized.getName());
+        Restaurant restaurant = RestaurantTestData.RESTAURANT_MATCHER.readFromJson(actions);
         RestaurantTestData.RESTAURANT_MATCHER.assertMatch(restaurant, RestaurantTestData.restaurant_1);
         MenuTestData.MENU_MATCHER.assertMatch(restaurant.getMenu(), MenuTestData.menus_1);
     }
