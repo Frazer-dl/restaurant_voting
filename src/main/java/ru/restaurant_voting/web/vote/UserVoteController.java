@@ -13,10 +13,8 @@ import ru.restaurant_voting.error.IllegalRequestDataException;
 import ru.restaurant_voting.model.Vote;
 import ru.restaurant_voting.repository.VoteRepository;
 import ru.restaurant_voting.service.VoteService;
-import ru.restaurant_voting.util.validation.ValidationUtil;
 import ru.restaurant_voting.web.AuthUser;
 
-import javax.validation.Valid;
 import java.net.URI;
 import java.util.Optional;
 
@@ -36,15 +34,14 @@ public class UserVoteController {
         this.voteRepository = voteRepository;
     }
 
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping
     @CacheEvict(allEntries = true)
-    public ResponseEntity<Vote> create(@AuthenticationPrincipal AuthUser authUser, @Valid @RequestBody Vote vote) {
-        log.info("create {}", vote);
+    public ResponseEntity<Vote> create(@AuthenticationPrincipal AuthUser authUser, @RequestParam int restaurantId) {
+        log.info("create user {} vote for {}", authUser.id(), restaurantId);
         int userId = authUser.id();
-        ValidationUtil.checkNew(vote);
-        Vote created = voteService.save(userId, vote.getRestaurant().id());
+        Vote created = voteService.save(userId, restaurantId);
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path(REST_URL + "/{id}")
+                .path(REST_URL)
                 .buildAndExpand(created.getId()).toUri();
         return ResponseEntity.created(uriOfNewResource).body(created);
     }

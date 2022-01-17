@@ -28,7 +28,6 @@ import java.util.Optional;
 @Slf4j
 @AllArgsConstructor
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-
     private final UserRepository userRepository;
 
     @Autowired

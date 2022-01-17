@@ -11,10 +11,6 @@ import ru.restaurant_voting.repository.UserRepository;
 import ru.restaurant_voting.repository.VoteRepository;
 import ru.restaurant_voting.util.DateTimeUtil;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.List;
-
 @Service
 @Slf4j
 @AllArgsConstructor
@@ -28,13 +24,13 @@ public class VoteService {
     public Vote save(int id, int restaurantId) {
         if (voteRepository.getByUserIdForToDay(id).isPresent()) {
             Vote vote = voteRepository.getByUserIdForToDay(id).get();
-            if (DateTimeUtil.isUserVoteInTime(LocalDateTime.now(), vote.getDate())) {
+            if (DateTimeUtil.isUserVoteInTime(vote.getDate())) {
                 return updateVote(vote, id, restaurantId);
             } else {
                 throw new IllegalRequestDataException("Can't update vote it's too late");
             }
         }
-        log.info("setVote for restaurant {} from user {}", restaurantId, id);
+        log.info("save for restaurant {} from user {}", restaurantId, id);
         return voteRepository.save(new Vote(null, userRepository.getById(id), restaurantRepository.getById(restaurantId)));
     }
 

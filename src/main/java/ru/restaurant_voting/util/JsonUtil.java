@@ -5,7 +5,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
 import lombok.experimental.UtilityClass;
-import ru.restaurant_voting.config.JsonConfig;
+import ru.restaurant_voting.config.json.JsonConfig;
 
 import java.io.IOException;
 import java.util.List;

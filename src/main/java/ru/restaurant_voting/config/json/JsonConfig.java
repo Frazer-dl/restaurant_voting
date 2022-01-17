@@ -1,4 +1,4 @@
-package ru.restaurant_voting.config;
+package ru.restaurant_voting.config.json;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;

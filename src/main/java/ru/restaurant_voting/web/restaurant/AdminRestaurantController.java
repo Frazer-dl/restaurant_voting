@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import ru.restaurant_voting.error.IllegalRequestDataException;
 import ru.restaurant_voting.model.Restaurant;
 import ru.restaurant_voting.repository.RestaurantRepository;
 import ru.restaurant_voting.util.validation.ValidationUtil;
@@ -18,6 +19,7 @@ import ru.restaurant_voting.util.validation.ValidationUtil;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(value = AdminRestaurantController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -40,15 +42,13 @@ public class AdminRestaurantController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Restaurant> get(@PathVariable int id) {
-        return ResponseEntity.ok(restaurantRepository.getById(id));
-    }
-
-    @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    @CacheEvict(allEntries = true)
-    public void delete(@PathVariable int id) {
-        restaurantRepository.delete(id);
+    public Restaurant get(@PathVariable int id) {
+        Optional<Restaurant> restaurant = restaurantRepository.findById(id);
+        if (restaurant.isPresent()) {
+            return restaurant.get();
+        } else {
+            throw new IllegalRequestDataException("Restaurant with id=" + id + " not exist.");
+        }
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -70,6 +70,14 @@ public class AdminRestaurantController {
     public void update(@Valid @RequestBody Restaurant restaurant, @PathVariable int id) {
         log.info("update {} with id={}", restaurant, id);
         ValidationUtil.assureIdConsistent(restaurant, id);
-        restaurantRepository.save(restaurant);
+        Restaurant updated = restaurantRepository.findById(restaurant.id()).get();
+        updated.setName(restaurant.getName());
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @CacheEvict(allEntries = true)
+    public void delete(@PathVariable int id) {
+        restaurantRepository.delete(id);
     }
 }

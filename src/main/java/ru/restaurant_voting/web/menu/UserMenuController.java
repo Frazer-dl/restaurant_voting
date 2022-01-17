@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.restaurant_voting.model.MenuItems;
+import ru.restaurant_voting.model.MenuItem;
 import ru.restaurant_voting.repository.MenuRepository;
 
 import java.time.LocalDate;
@@ -30,7 +30,7 @@ public class UserMenuController {
 
     @GetMapping
     @Cacheable
-    public List<MenuItems> getAll(@PathVariable int id) {
+    public List<MenuItem> getAll(@PathVariable int id) {
         return menuRepository.getAll(LocalDate.now(), id);
     }
 }

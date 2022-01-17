@@ -13,15 +13,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class UserTestData {
     public static final MatcherFactory.Matcher<User> USER_MATCHER = MatcherFactory.usingIgnoringFieldsComparator(User.class, "registered", "password");
-    public static MatcherFactory.Matcher<User> USER_WITH_MEALS_MATCHER =
-            MatcherFactory.usingAssertions(User.class,
-                    //     No need use ignoringAllOverriddenEquals, see https://assertj.github.io/doc/#breaking-changes
-                    (a, e) -> assertThat(a).usingRecursiveComparison()
-                            .ignoringFields("registered", "password").isEqualTo(e),
-                    (a, e) -> {
-                        throw new UnsupportedOperationException();
-                    });
-
     public static final int USER_ID = 1;
     public static final int ADMIN_ID = 2;
     public static final int USER_2_ID = 3;
@@ -31,11 +22,18 @@ public class UserTestData {
     public static final String ADMIN_MAIL = "admin@gmail.com";
     public static final String USER_2_MAIL = "user2@yandex.ru";
     public static final String USER_3_MAIL = "user3@yandex.ru";
-
     public static final User user = new User(USER_ID, "User", USER_MAIL, "password", Role.USER);
     public static final User user2 = new User(USER_2_ID, "User2", USER_2_MAIL, "password", Role.USER);
     public static final User user3 = new User(USER_3_ID, "User3", USER_3_MAIL, "password", Role.USER);
     public static final User admin = new User(ADMIN_ID, "Admin", ADMIN_MAIL, "admin", Role.ADMIN, Role.USER);
+    public static MatcherFactory.Matcher<User> USER_WITH_MEALS_MATCHER =
+            MatcherFactory.usingAssertions(User.class,
+                    //     No need use ignoringAllOverriddenEquals, see https://assertj.github.io/doc/#breaking-changes
+                    (a, e) -> assertThat(a).usingRecursiveComparison()
+                            .ignoringFields("registered", "password").isEqualTo(e),
+                    (a, e) -> {
+                        throw new UnsupportedOperationException();
+                    });
 
     public static User getNew() {
         return new User(null, "New", "new@gmail.com", "newPass", false, new Date(), Collections.singleton(Role.USER));

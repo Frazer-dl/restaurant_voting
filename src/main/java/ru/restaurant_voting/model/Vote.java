@@ -1,24 +1,28 @@
 package ru.restaurant_voting.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import ru.restaurant_voting.config.json.VoteDeserializer;
+import ru.restaurant_voting.config.json.VoteSerializer;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Date;
 
 @Entity
 @Table(name = "vote", uniqueConstraints = {@UniqueConstraint(name = "vote_user_date_idx", columnNames = {"user_id", "date"})})
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@JsonDeserialize(using = VoteDeserializer.class)
+@JsonSerialize(using = VoteSerializer.class)
 public class Vote extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)

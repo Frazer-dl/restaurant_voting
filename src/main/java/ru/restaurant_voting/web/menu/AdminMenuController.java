@@ -8,10 +8,13 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import ru.restaurant_voting.model.MenuItems;
+import ru.restaurant_voting.error.IllegalRequestDataException;
+import ru.restaurant_voting.model.MenuItem;
 import ru.restaurant_voting.repository.MenuRepository;
+import ru.restaurant_voting.repository.RestaurantRepository;
 import ru.restaurant_voting.util.validation.ValidationUtil;
 
 import javax.validation.Valid;
@@ -28,47 +31,64 @@ public class AdminMenuController {
     static final String REST_URL = "/api/admin/restaurants/{id}/menu-items";
 
     private final MenuRepository menuRepository;
+    private final RestaurantRepository restaurantRepository;
 
-    public AdminMenuController(MenuRepository menuRepository) {
+    public AdminMenuController(MenuRepository menuRepository, RestaurantRepository restaurantRepository) {
         this.menuRepository = menuRepository;
+        this.restaurantRepository = restaurantRepository;
+    }
+
+    @GetMapping("/by-date")
+    public List<MenuItem> getAllByDate(@PathVariable int id, @RequestParam("date")
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+        return menuRepository.getAll(date, id);
     }
 
     @GetMapping
     @Cacheable
-    public List<MenuItems> getAll(@PathVariable int id, @RequestParam("date")
-                                  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
-        if (date == null) {
-            date = LocalDate.now();
-        }
-        return menuRepository.getAll(date, id);
+    public List<MenuItem> getAll(@PathVariable int id) {
+        return menuRepository.getAll(LocalDate.now(), id);
+    }
+
+    @GetMapping("/{menuId}")
+    @Cacheable
+    public MenuItem get(@PathVariable int menuId) {
+        return menuRepository.findById(menuId).get();
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @CacheEvict(allEntries = true)
-    public ResponseEntity<MenuItems> create(@Valid @RequestBody MenuItems menuItem) {
+    public ResponseEntity<MenuItem> create(@Valid @RequestBody MenuItem menuItem, @PathVariable int id) {
         log.info("create {}", menuItem);
         ValidationUtil.checkNew(menuItem);
-        MenuItems created = menuRepository.save(menuItem);
+        menuItem.setRestaurant(restaurantRepository.findById(id).get());
+        MenuItem created = menuRepository.save(menuItem);
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path(REST_URL + "/{id}")
+                .path(REST_URL + "/" + created.getId())
                 .buildAndExpand(created.getId()).toUri();
         return ResponseEntity.created(uriOfNewResource).body(created);
     }
 
     @PutMapping(value = "/{menuId}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @Transactional
     @CacheEvict(allEntries = true)
-    public void update(@Valid @RequestBody MenuItems menuItem, @PathVariable int menuId,  @PathVariable int id) {
+    public void update(@Valid @RequestBody MenuItem menuItem, @PathVariable int menuId, @PathVariable int id) {
         log.info("update {} for restaurant {}", menuItem, menuId);
-        ValidationUtil.assureIdConsistent(menuItem, menuId);
+        MenuItem previous = menuRepository.getWithRestaurant(menuId, id);
+        if (previous == null)
+            throw new IllegalRequestDataException("Can't find restaurant=" + id + " menu item=" + menuId);
         ValidationUtil.assureIdConsistent(menuItem.getRestaurant(), id);
-        menuRepository.save(menuItem);
+        ValidationUtil.assureIdConsistent(menuItem, menuId);
+        previous.setName(menuItem.getName());
+        previous.setPrice(menuItem.getPrice());
+        previous.setDate(menuItem.getDate());
     }
 
     @DeleteMapping("/{menuId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @CacheEvict(allEntries = true)
-    public void delete(@PathVariable int menuId, @PathVariable String id) {
-        menuRepository.delete(menuId);
+    public void delete(@PathVariable int menuId, @PathVariable int id) {
+        menuRepository.delete(menuId, id);
     }
 }

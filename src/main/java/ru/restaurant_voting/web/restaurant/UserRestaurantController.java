@@ -2,21 +2,19 @@ package ru.restaurant_voting.web.restaurant;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheConfig;
-import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import ru.restaurant_voting.error.IllegalRequestDataException;
 import ru.restaurant_voting.model.Restaurant;
 import ru.restaurant_voting.repository.RestaurantRepository;
 
-import java.time.LocalDate;
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(value = UserRestaurantController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -33,27 +31,37 @@ public class UserRestaurantController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Restaurant> get(@PathVariable int id) {
-        return ResponseEntity.ok(restaurantRepository.getById(id));
+    @CacheEvict(allEntries = true)
+    public Restaurant get(@PathVariable int id) {
+        Optional<Restaurant> restaurant = restaurantRepository.findById(id);
+        if (restaurant.isPresent()) {
+            return restaurant.get();
+        } else {
+            throw new IllegalRequestDataException("Restaurant with id=" + id + " not exist.");
+        }
     }
 
     @GetMapping("/{id}/with-menu")
-    public Restaurant getWithMenus(@PathVariable int id) {
-        Restaurant restaurant = restaurantRepository.getWithMenus(id);
-        restaurant.setMenu(restaurant.getMenu().stream()
-                .filter(m -> Objects.equals(m.getDate(), LocalDate.now()))
-                .collect(Collectors.toList()));
-        return restaurant;
+    @CacheEvict(allEntries = true)
+    public Restaurant getWithMenu(@PathVariable int id) {
+        return restaurantRepository.getWithMenu(id);
     }
 
     @GetMapping
-    @Cacheable
+    @CacheEvict(allEntries = true)
     public List<Restaurant> getAll() {
         return restaurantRepository.findAll(Sort.by(Sort.Direction.ASC, "name"));
     }
 
+    @GetMapping("/with-menu")
+    @CacheEvict(allEntries = true)
+    public List<Restaurant> getAllWithMenusForToDay() {
+        return restaurantRepository.getAllWithMenuForToDay();
+    }
+
     @GetMapping("/top={q}")
-    public List<Restaurant> getMostPopularRestaurantName(@PathVariable int q) {
+    @CacheEvict(allEntries = true)
+    public List<Restaurant> getMostPopularRestaurant(@PathVariable int q) {
         return restaurantRepository.getMostPopularRestaurant(q);
     }
 }

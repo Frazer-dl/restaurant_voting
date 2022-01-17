@@ -16,7 +16,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 class UserRestaurantControllerTest extends AbstractControllerTest {
 
-    static final String REST_URL = "/api/profile/restaurants";
+    static final String REST_URL = "/api/restaurants";
 
     @Test
     @WithUserDetails(value = UserTestData.USER_MAIL)
@@ -35,17 +35,22 @@ class UserRestaurantControllerTest extends AbstractControllerTest {
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(RestaurantTestData.RESTAURANT_MATCHER.contentJson(RestaurantTestData.restaurant_2, RestaurantTestData.restaurant_1));
+                .andExpect(RestaurantTestData.RESTAURANT_MATCHER.contentJson(RestaurantTestData.restaurant_2,
+                        RestaurantTestData.restaurant_3, RestaurantTestData.restaurant_1));
     }
 
     @Test
     @WithUserDetails(value = UserTestData.USER_MAIL)
     void getWithMenus() throws Exception {
-        ResultActions actions = perform(MockMvcRequestBuilders.get(REST_URL + "/" + RestaurantTestData.RESTAURANT_1_ID + "/withMenus"))
+        ResultActions actions = perform(MockMvcRequestBuilders.get(REST_URL + "/" + RestaurantTestData.RESTAURANT_1_ID + "/with-menu"))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
-        Restaurant restaurant = RestaurantTestData.RESTAURANT_MATCHER.readFromJson(actions);
+        Restaurant deserialized = RestaurantTestData.RESTAURANT_MATCHER.readFromJson(actions);
+        Restaurant restaurant = new Restaurant(RestaurantTestData.RESTAURANT_MATCHER.readFromJson(actions));
+        restaurant.setMenu(deserialized.getMenu());
+        restaurant.setId(deserialized.getId());
+        restaurant.setName(deserialized.getName());
         RestaurantTestData.RESTAURANT_MATCHER.assertMatch(restaurant, RestaurantTestData.restaurant_1);
         MenuTestData.MENU_MATCHER.assertMatch(restaurant.getMenu(), MenuTestData.menus_1);
     }
