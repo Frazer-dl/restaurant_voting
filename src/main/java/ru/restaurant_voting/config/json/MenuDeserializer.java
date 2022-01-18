@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JacksonException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import ru.restaurant_voting.model.MenuItem;
 import ru.restaurant_voting.model.Restaurant;
@@ -33,14 +32,6 @@ public class MenuDeserializer extends StdDeserializer<MenuItem> {
         }
         String name = String.valueOf(jsonNode.get("name")).replaceAll("\"", "");
         Integer price = Integer.parseInt(String.valueOf(jsonNode.get("price")));
-
-        ObjectMapper objectMapper = new ObjectMapper();
-        Restaurant restaurant;
-        try {
-            restaurant = objectMapper.convertValue(jsonNode.get("restaurant"), Restaurant.class);
-        } catch (Exception e) {
-            restaurant = new Restaurant(null, null, null);
-        }
-        return new MenuItem(id, name, LocalDate.now(), price, restaurant);
+        return new MenuItem(id, name, LocalDate.now(), price, new Restaurant(null, null, null));
     }
 }

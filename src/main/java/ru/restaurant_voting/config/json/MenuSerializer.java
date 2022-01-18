@@ -27,12 +27,6 @@ public class MenuSerializer extends StdSerializer<MenuItem> {
         }
         jgen.writeStringField("name", value.getName());
         jgen.writeNumberField("price", value.getPrice());
-        try {
-            if (!(value.getRestaurant() == null)) {
-                jgen.writeObjectField("restaurant", value.getRestaurant().toString());
-            }
-        } catch (Exception ignored) {
-        }
         jgen.writeEndObject();
     }
 }

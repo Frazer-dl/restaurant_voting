@@ -1,5 +1,5 @@
 ## Restaurant voting
-To get familiar with the functionality use [swagger api](http://localhost:8080/swagger-ui/index.html#/) after download and run app (mvn spring-boot:run).
+To get familiar with the functionality after download and run app (mvn spring-boot:run) use [swagger api](http://localhost:8080/swagger-ui/index.html#/) .
 ----
 Design and implement a REST API using Hibernate/Spring/SpringMVC (or Spring-Boot) **without frontend**.
 

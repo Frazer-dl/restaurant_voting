@@ -58,7 +58,7 @@ class UserVoteControllerTest extends AbstractControllerTest {
                 .andDo(print())
                 .andExpect(inTime ?
                         content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON) :
-                        VoteTestData.VOTE_MATCHER.contentJson(VoteTestData.ILLEGAL_VOTE));
+                        status().isUnprocessableEntity());
         if (inTime) {
             Vote vote = deserializer(actions);
             RestaurantTestData.RESTAURANT_MATCHER.assertMatch(vote.getRestaurant(), VoteTestData.USER_1_VOTE_FOR_RESTAURANT_2.getRestaurant());
@@ -69,9 +69,8 @@ class UserVoteControllerTest extends AbstractControllerTest {
     Vote deserializer(ResultActions actions) throws UnsupportedEncodingException {
         Vote deserialized = VoteTestData.VOTE_MATCHER.readFromJson(actions);
         User user = userRepository.getById(deserialized.getUser().getId());
-        Restaurant restaurant = new Restaurant(restaurantRepository.getById(deserialized.getRestaurant().getId()));
-        restaurant.setId(deserialized.getRestaurant().getId());
-        restaurant.setName(deserialized.getRestaurant().getName());
+        Restaurant restaurantProxy = restaurantRepository.getById(deserialized.getRestaurant().getId());
+        Restaurant restaurant = new Restaurant(restaurantProxy.getId(), restaurantProxy.getName(), restaurantProxy.getMenu());
         return new Vote(deserialized.getId(), user, restaurant, deserialized.getDate());
     }
 }

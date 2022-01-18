@@ -23,9 +23,7 @@ public class VoteSerializer extends StdSerializer<Vote> {
         jgen.writeStartObject();
         jgen.writeNumberField("id", value.getId());
         jgen.writeStringField("user-id", value.getUser().getId().toString());
-        jgen.writeStringField("user-email", value.getUser().getEmail());
         jgen.writeStringField("restaurant-id", value.getRestaurant().getId().toString());
-        jgen.writeStringField("restaurant-name", value.getRestaurant().getName());
         jgen.writeStringField("date", value.getDate().toString());
         jgen.writeEndObject();
     }
