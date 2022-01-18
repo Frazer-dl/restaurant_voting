@@ -2,8 +2,6 @@ package ru.restaurant_voting.web.restaurant;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheConfig;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.PathVariable;
 import ru.restaurant_voting.error.IllegalRequestDataException;
@@ -14,7 +12,6 @@ import java.util.List;
 import java.util.Optional;
 
 @Slf4j
-@CacheConfig(cacheNames = "restaurants")
 public abstract class AbstractRestaurantController {
 
     @Autowired
@@ -24,7 +21,6 @@ public abstract class AbstractRestaurantController {
         return restaurantRepository.findAll(Sort.by(Sort.Direction.ASC, "name"));
     }
 
-    @CacheEvict(allEntries = true)
     public Restaurant get(@PathVariable int id) {
         Optional<Restaurant> restaurant = restaurantRepository.findById(id);
         if (restaurant.isPresent()) {

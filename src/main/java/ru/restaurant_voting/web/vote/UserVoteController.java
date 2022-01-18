@@ -1,9 +1,6 @@
 package ru.restaurant_voting.web.vote;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cache.annotation.CacheConfig;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -22,7 +19,6 @@ import java.util.Optional;
 @RestController
 @RequestMapping(value = UserVoteController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 @Slf4j
-@CacheConfig(cacheNames = "votes")
 public class UserVoteController {
 
     static final String REST_URL = "/api/profile/votes";
@@ -36,7 +32,6 @@ public class UserVoteController {
     }
 
     @PostMapping
-    @CacheEvict(allEntries = true)
     public ResponseEntity<Vote> create(@AuthenticationPrincipal AuthUser authUser, @RequestParam int restaurantId) {
         log.info("create user {} vote for {}", authUser.id(), restaurantId);
         int userId = authUser.id();
@@ -48,7 +43,6 @@ public class UserVoteController {
     }
 
     @GetMapping
-    @Cacheable
     public Vote get(@AuthenticationPrincipal AuthUser authUser) {
         int userId = authUser.id();
         Optional<Vote> vote = voteRepository.getByUserIdForToDay(userId);
@@ -60,7 +54,6 @@ public class UserVoteController {
     }
 
     @GetMapping("/history")
-    @Cacheable
     public List<Vote> getHistory(@AuthenticationPrincipal AuthUser authUser) {
         int userId = authUser.id();
         Optional<List<Vote>> votes = voteRepository.getHistory(userId);

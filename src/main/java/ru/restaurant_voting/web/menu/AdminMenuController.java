@@ -51,12 +51,12 @@ public class AdminMenuController extends AbstractMenuController {
     }
 
     @GetMapping("/{menuId}")
-    @Cacheable
     public MenuItem get(@PathVariable int menuId, @PathVariable int id) {
         return menuRepository.getWithRestaurant(menuId, id);
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    @Transactional
     @CacheEvict(allEntries = true)
     public ResponseEntity<MenuItem> create(@Valid @RequestBody MenuItem menuItem, @PathVariable int id) {
         log.info("create {}", menuItem);

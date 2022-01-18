@@ -32,7 +32,6 @@ public class AdminRestaurantController extends AbstractRestaurantController {
     }
 
     @GetMapping("/{id}")
-    @Cacheable
     public Restaurant get(@PathVariable int id) {
         return super.get(id);
     }

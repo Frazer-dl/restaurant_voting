@@ -2,7 +2,6 @@ package ru.restaurant_voting.web.menu;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.web.bind.annotation.PathVariable;
 import ru.restaurant_voting.model.MenuItem;
 import ru.restaurant_voting.repository.MenuRepository;
@@ -11,7 +10,6 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Slf4j
-@CacheConfig(cacheNames = "restaurants")
 public abstract class AbstractMenuController {
 
     @Autowired

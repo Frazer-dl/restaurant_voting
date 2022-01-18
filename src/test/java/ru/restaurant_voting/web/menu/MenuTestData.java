@@ -20,10 +20,10 @@ public class MenuTestData {
     public static final String MENU_3_NAME = "Бургер с говядиной";
     public static final String MENU_4_NAME = "Соус Невероятный";
     public static final String MENU_5_NAME = "Menu Item 3";
-    public static final int PRICE_200 = 200;
-    public static final int PRICE_250 = 250;
-    public static final int PRICE_500 = 500;
-    public static final int PRICE_50 = 50;
+    public static final int PRICE_200 = 2000;
+    public static final int PRICE_250 = 2500;
+    public static final int PRICE_500 = 5000;
+    public static final int PRICE_50 = 500;
 
     public static final MenuItem menu_1 = new MenuItem(MENU_1_ID, MENU_1_NAME, LocalDate.now(), PRICE_200, RestaurantTestData.restaurant_1);
     public static final MenuItem menu_2 = new MenuItem(MENU_2_ID, MENU_2_NAME, LocalDate.now(), PRICE_250, RestaurantTestData.restaurant_1);
