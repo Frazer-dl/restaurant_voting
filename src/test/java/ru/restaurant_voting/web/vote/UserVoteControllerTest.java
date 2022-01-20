@@ -52,7 +52,7 @@ class UserVoteControllerTest extends AbstractControllerTest {
     @Test
     @WithUserDetails(value = UserTestData.USER_MAIL)
     void update() throws Exception {
-        boolean inTime = DateTimeUtil.isUserVoteInTime(LocalDate.now());
+        boolean inTime = DateTimeUtil.isUserVoteInTime();
         ResultActions actions = perform(MockMvcRequestBuilders.post(REST_URL + "?restaurantId=2"))
                 .andExpect(inTime ? status().is2xxSuccessful() : status().is4xxClientError())
                 .andDo(print())

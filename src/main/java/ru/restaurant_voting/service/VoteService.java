@@ -11,6 +11,8 @@ import ru.restaurant_voting.repository.UserRepository;
 import ru.restaurant_voting.repository.VoteRepository;
 import ru.restaurant_voting.util.DateTimeUtil;
 
+import java.util.Optional;
+
 @Service
 @Slf4j
 @AllArgsConstructor
@@ -22,21 +24,16 @@ public class VoteService {
 
     @Transactional
     public Vote save(int id, int restaurantId) {
-        if (voteRepository.getByUserIdForToDay(id).isPresent()) {
-            Vote vote = voteRepository.getByUserIdForToDay(id).get();
-            if (DateTimeUtil.isUserVoteInTime(vote.getDate())) {
-                return updateVote(vote, id, restaurantId);
+        Optional<Vote> vote = voteRepository.getByUserIdForToDay(id);
+        if (vote.isPresent()) {
+            if (DateTimeUtil.isUserVoteInTime()) {
+                vote.get().setRestaurant(restaurantRepository.getById(restaurantId));
+                return vote.get();
             } else {
                 throw new IllegalRequestDataException("Can't update vote it's too late");
             }
         }
         log.info("save for restaurant {} from user {}", restaurantId, id);
         return voteRepository.save(new Vote(null, userRepository.getById(id), restaurantRepository.getById(restaurantId)));
-    }
-
-    private Vote updateVote(Vote vote, int id, int restaurantId) {
-        log.info("updateVote for restaurant {} from user {}", restaurantId, id);
-        vote.setRestaurant(restaurantRepository.getById(restaurantId));
-        return vote;
     }
 }
